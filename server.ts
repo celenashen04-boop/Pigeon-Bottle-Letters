@@ -67,37 +67,87 @@ app.get("/api/health", (_req, res) => {
 // AI 1: Letter Writing Assistant
 app.post("/api/ai/letter-help", async (req, res) => {
   try {
-    const { prompt, recipient, tone = "nostalgic and poetic", currentDraft = "" } = req.body;
+    const { prompt, recipient, tone = "concise & professional", currentDraft = "", deliveryMode = "pigeon" } = req.body;
+    const isBottle = deliveryMode === "bottle" || (typeof deliveryMode === "string" && deliveryMode.toLowerCase().includes("bottle"));
     const ai = getGeminiClient();
 
     if (!ai) {
       // Atmospheric fallback when no key is set yet
-      const recipientName = recipient || "an old friend across the sea";
+      if (isBottle) {
+        return res.json({
+          suggestedLetter: `Hello,\n\nI am casting this message into the world hoping it reaches someone navigating similar tides in our field. Over the past few seasons, I've been reflecting on our craft and where the industry is heading next.\n\nIf this note happens to wash ashore on your sands and resonates with your own work, I would welcome the chance to exchange thoughts or hear a brief word about your journey.\n\nWishing you fair winds and steady horizons,\nA Fellow Explorer`,
+          poeticExcerpt: "An open dispatch cast into the tides for whoever may find it.",
+          feedback: "In bottle outreach, the greeting remains warm and universal without assuming the recipient's identity, inviting open serendipity.",
+          alternativePhrasing: "If you ever have a few minutes to share your perspective, I would love to hear your thoughts.",
+          stationeryAdvice: {
+            paperStyle: "ocean-drift",
+            sealColor: "#0284c7",
+            fontStyle: "serif",
+          },
+        });
+      }
+
+      const recipientName = recipient || "a colleague in the field";
       return res.json({
-        suggestedLetter: `Dearest ${recipientName},\n\nThe fog has rolled in over the harbour tonight, softening the edge of the world until only the lantern on the pier remains. I found myself thinking of the unhurried hours we once shared, before the rush of everyday life drew its invisible borders between us.\n\nI am entrusting these words to the wind and wings of a traveler. May it find you when the evening is quiet, perhaps with tea cooling beside your window. Remember that distance is only the silence between two musical notes—necessary, and full of quiet grace.\n\nYours in slow wanderlust,\nA Wandering Pen`,
-        poeticExcerpt: "Distance is only the silence between two notes—necessary, and full of quiet grace.",
+        suggestedLetter: `Hi ${recipientName},\n\nI hope your week is going well. I've been closely following your work and would love to connect briefly.\n\nWould you have 15 minutes in the coming week or two for a brief chat about your experience in the field?\n\nBest regards,\nA Fellow Colleague`,
+        poeticExcerpt: "Brief reach-out to connect on shared interests.",
+        feedback: "A direct, low-friction request that respects the recipient's schedule.",
+        alternativePhrasing: "If your schedule allows for a brief 15-minute chat, I would welcome the opportunity to connect.",
         stationeryAdvice: {
           paperStyle: "parchment",
           sealColor: "#7c2d12",
-          fontStyle: "cursive",
-          stampTheme: "migratory-swallow",
+          fontStyle: "serif",
         },
       });
     }
 
-    const systemInstruction = `You are a quiet, poetic letter-writing scribe for "Drift", a slow messaging app inspired by 19th-century epistolary culture, maritime bottles, and carrier pigeon post. 
-Write or refine a warm, deeply human letter that feels tangible, slow, and sincere based on the user's topic or context description. Never use modern slang, emojis, or corporate phrases. Embrace atmosphere, tactile sensory details (weather, lamplight, sea air, paper, seasons), and unhurried emotional intimacy.
-Return valid JSON with keys:
-- suggestedLetter: string (the complete letter with salutation, evocative paragraphs, and signoff)
-- poeticExcerpt: string (a one-line lyrical quote from the letter suitable for a wax envelope quote)
-- stationeryAdvice: { paperStyle: 'parchment' | 'tea-stained' | 'linen' | 'midnight-vellum' | 'botanical-pressed', sealColor: string (hex), fontStyle: 'cursive' | 'serif' | 'typewriter', stampTheme: string }`;
+    const systemInstruction = `You are a Peer Career Advisor and Mentor with Professional Experience.
+Your purpose:
+Act as a trusted sounding board and peer mentor in a professional context, offering perspective as an experienced professional colleague.
+You help write reach-out emails/messages, coffee chat invitations regarding specific career positions, cold networking messages, or sincere apology follow-ups for missed coffee chats/networking opportunities in the user's authentic voice and tone.
 
-    const contents = `Prompt / Topic: ${prompt || "A contemplative note to someone I haven't seen in seasons."}
-Recipient: ${recipient || "A cherished acquaintance"}
+Engagement Context:
+- Pigeon mode: Targeted reach-out to a specific contact or known professional.
+- Bottle mode: Cold outreach cast into the sea / drift.
+
+CRITICAL REQUIREMENT FOR BOTTLE MODE:
+When deliveryMode is "bottle":
+- You DO NOT know who will pick up or find the bottle.
+- You MUST NEVER address a specific person by name or placeholder! NEVER write "[Name]", "Dear [Name]", "Hi [Name]", specific person names, or personalized titles.
+- You MUST use an open, welcoming salutation, such as "Hello,", "Greetings,", "To whoever finds this letter,", or "Hello to whoever unseals this bottle,".
+- Frame the body as an open letter/inquiry to any practitioner or explorer in the field who discovers it.
+- For Pigeon mode only: You may use targeted greetings like "Hi [Name]," or "Dear [Name],".
+
+Strict Behavioral Rules:
+1. Professional, Natural Tone: Write in a clean, modern, peer-to-peer professional tone. Do NOT use 19th-century archaic language (no "Dearest", "communion", "harbor", "the fog had rolled in"). Use natural modern professional greetings.
+2. Empathy without Over-Sentimentalizing: Be respectful and considerate, but do not dive excessively into dramatic emotions.
+3. Sound Judgment & Respect for Time: Keep messages concise and to the point (generally 2-3 short paragraphs). Never be long-winded.
+4. Avoid Over-Deference: Do not start with groveling, self-flagellation, or exaggerated apologies.
+5. No Fictional Claims: Do not invent credentials. Use placeholders like [Your Current Role], [Company], or [Topic of Interest] for user-specific facts.
+6. Concrete Next Steps: Conclude with a clear, low-friction invitation to connect.
+7. Peer Mentor Feedback: Provide practical feedback on why this structure works.
+
+Return valid JSON with keys:
+- suggestedLetter: string (the complete message draft ready for the user to review and edit)
+- poeticExcerpt: string (a concise recommended subject line or 1-line key takeaway)
+- feedback: string (1-2 sentences of peer mentor feedback explaining why this phrasing works)
+- alternativePhrasing: string (an alternative phrasing for a key sentence if a point is true but hard to say)
+- stationeryAdvice: { paperStyle: 'parchment' | 'tea-stained' | 'linen' | 'midnight-vellum' | 'botanical-pressed' | 'ocean-drift' | 'sea-mist', sealColor: string (hex), fontStyle: 'serif' | 'typewriter' | 'cursive' }`;
+
+    const contents = isBottle
+      ? `Delivery Mode: Bottle (Unaddressed oceanic drift letter cast into tides to an unknown finder).
+User Context & Situation: ${prompt || "Open reflection and invitation to connect regarding work in this field."}
 Desired Tone: ${tone}
 Current partial draft (if any): "${currentDraft}"
 
-Please craft this letter.`;
+CRITICAL MANDATORY RULE: Because this is Bottle mode, DO NOT address any specific person. DO NOT use "[Name]" or any individual's name. Use an open greeting like "Hello," or "To whoever finds this letter,".`
+      : `Delivery Mode: Pigeon (Targeted reach-out to a specific contact).
+Recipient: ${recipient || "A professional in the field"}
+User Context & Situation: ${prompt || "Reaching out to ask for a coffee chat regarding career trajectory."}
+Desired Tone: ${tone}
+Current partial draft (if any): "${currentDraft}"
+
+Please draft an authentic, professional message tailored to this context, following the mentor instructions.`;
 
     const response = await callGeminiWithFallback(ai, {
       contents,
@@ -106,6 +156,14 @@ Please craft this letter.`;
     });
 
     const parsed = JSON.parse(response.text || "{}");
+    
+    // Extra safety guard for bottle mode: strip any accidental personal name salutations
+    if (isBottle && parsed.suggestedLetter) {
+      parsed.suggestedLetter = parsed.suggestedLetter
+        .replace(/^(Dear|Hi|Hello|Greetings)\s+(\[Name\]|\[Recipient\]|\[Recipient's Name\]|[A-Z][a-z]+(\s+[A-Z][a-z]+)?),?/im, "Hello,")
+        .replace(/^To\s+(\[Name\]|\[Recipient\]),?/im, "To whoever finds this letter,");
+    }
+
     res.json(parsed);
   } catch (error: any) {
     console.error("AI letter help error:", error);

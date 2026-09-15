@@ -66,10 +66,10 @@ export const PigeonPostView: React.FC<PigeonPostViewProps> = ({
           <div className="flex items-center gap-3">
             <button
               onClick={onOpenWriteModal}
-              className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#8a3318] to-[#6d2511] text-[#fef9f3] text-sm font-serif-vintage font-bold border border-[#b44828] shadow-md hover:brightness-110 active:scale-95 transition-all"
+              className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#8a3318] to-[#6d2511] text-[#fef9f3] text-sm font-bold tracking-wide border border-[#b44828] shadow-md hover:brightness-110 active:scale-95 transition-all cursor-pointer"
             >
               <Feather className="w-4 h-4" />
-              <span>Attach Letter to Homer</span>
+              <span>Send Letter with Pigeon</span>
             </button>
           </div>
         </div>

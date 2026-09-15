@@ -12,7 +12,8 @@ import {
   KEEPSAKES, 
   SEASONS, 
   INITIAL_NOTIFICATIONS, 
-  getRandomPigeonName 
+  getRandomPigeonName,
+  MATCHING_PROFESSIONALS
 } from './constants';
 
 const STORAGE_KEY_PIGEONS = 'drift_pigeon_flights_v3';
@@ -29,7 +30,11 @@ export const INITIAL_LETTERS: Letter[] = [
     title: 'On the Scent of Salt & Cedar',
     content: `Dearest Friend,\n\nI sit by the western window as the evening tide retreats from the rocks, leaving the dark ribbons of kelp gleaming in the twilight. A flock of curlews just wheeled past towards the estuary.\n\nI am sending this letter with our faithful slate homer. Whether it finds you in three days or after three weeks of wanderings through coastal fog, know that I am keeping the hearth warm. Do you remember the small stone tower we climbed in Sintra? I found a pressed fern inside an old journal this morning and immediately thought of your laugh when the rain caught us.\n\nTake your time to answer. There is no rush in these seasons.\n\nWith gentle thoughts,\nClara`,
     author: 'Clara Vance',
+    authorCompany: 'Lisbon Botanical Institute',
+    authorPosition: 'Lead Herbarium Researcher',
     recipient: 'You',
+    recipientCompany: 'Coastal Correspondence Guild',
+    recipientPosition: 'Keeper of the Coastal Hearth',
     recipientLocation: 'Your Coastal Hearth',
     dateCreated: '3 weeks ago',
     paperStyle: 'tea-stained',
@@ -59,6 +64,8 @@ export const INITIAL_LETTERS: Letter[] = [
     content: `To Whomever Stumbles Across This Shore,\n\nI am writing this from the iron railing of a cargo steamer somewhere west of the Azores. The engine hums beneath my boots like an old whale singing to the dark.\n\nI spent twenty years believing that certainty was peace—that knowing every hour of the coming week was what made a life secure. But tonight, beneath a canopy of stars so dense they look like spilled salt across velvet, I realized that certainty is often just a cage painted in gold.\n\nI place this into the deep with a small green piece of sea glass. If your fingers are now holding this dry parchment, consider it proof that what is meant to reach you will navigate every fathom of silence to do so.\n\nMay your seas be kind.\n— A Traveler on the Night Watch`,
     author: 'A Traveler on the Night Watch',
     recipient: 'Finder of the Tide',
+    recipientCompany: 'Coastal Correspondence Guild',
+    recipientPosition: 'Keeper of the Coastal Hearth',
     recipientLocation: 'A Far Coastline',
     dateCreated: '142 days ago',
     paperStyle: 'parchment',
@@ -67,6 +74,10 @@ export const INITIAL_LETTERS: Letter[] = [
     inkColor: '#1c1917',
     borderStyle: 'deckled',
     deliveryMode: 'bottle',
+    targetIndustry: 'Maritime, Cartography & Navigation',
+    targetPosition: 'Ocean Passage Navigator',
+    discoveredByCompany: 'Coastal Correspondence Guild',
+    discoveredByPosition: 'Keeper of the Coastal Hearth',
     keepsake: KEEPSAKES[0], // sea glass
     stamps: [POSTAL_STAMPS[4]],
     reactions: [
@@ -88,7 +99,11 @@ export const INITIAL_LETTERS: Letter[] = [
     title: 'A Letter in Flight to Julian',
     content: `Dear Julian,\n\nThe swallows have begun gathering along the telegraph wires above our orchard, which can only mean the first chill of autumn is descending from the Highlands.\n\nI wanted to ask you about the ancient maritime logbooks you mentioned in your last correspondence. Did the old lighthouse keepers truly believe that migrating petrels could foretell a three-day gale? The bird carrying this letter has weathered storms over the Irish Sea before, but I still watch the western sky with a held breath.\n\nWrite back when the lantern is trimmed and the night is long.\n\nWarm regards,\nYour Correspondent`,
     author: 'You',
+    authorCompany: 'Coastal Correspondence Guild',
+    authorPosition: 'Keeper of the Coastal Hearth',
     recipient: 'Julian Thorne',
+    recipientCompany: 'Northern Lighthouse Board',
+    recipientPosition: 'Chief Keeper & Archival Historian',
     recipientLocation: 'Edinburgh, Scotland',
     dateCreated: '6 days ago',
     paperStyle: 'linen',
@@ -108,6 +123,8 @@ export const INITIAL_LETTERS: Letter[] = [
     title: 'Words for a Stranger After Midnight',
     content: `Whoever you are,\n\nIt is 2:30 in the morning and rain is tapping against my skylight. I have no grand confession, only the quiet wish that whoever breaks this wax seal is having a gentler week than the one they left behind.\n\nI tucked a dried sprig of lavender inside. If it still smells of late summer, close your eyes and breathe it in. You are not as alone as the midnight makes you feel.\n\nCast from the cliffs at sunset.\n— S.`,
     author: 'You',
+    authorCompany: 'Coastal Correspondence Guild',
+    authorPosition: 'Keeper of the Coastal Hearth',
     recipient: 'An Unknown Horizon',
     recipientLocation: 'Global Ocean',
     dateCreated: '14 days ago',
@@ -117,6 +134,8 @@ export const INITIAL_LETTERS: Letter[] = [
     inkColor: '#3f2e1a',
     borderStyle: 'flourish',
     deliveryMode: 'bottle',
+    targetIndustry: 'Science, Ecology & Botany',
+    targetPosition: 'Herbarium Botanist',
     keepsake: KEEPSAKES[4], // lavender
     stamps: [POSTAL_STAMPS[2], POSTAL_STAMPS[5]],
     reactions: [],
@@ -134,6 +153,8 @@ export const INITIAL_PIGEONS: PigeonFlight[] = [
     letter: INITIAL_LETTERS[2],
     sender: 'You',
     recipient: 'Julian Thorne',
+    recipientCompany: 'Northern Lighthouse Board',
+    recipientPosition: 'Chief Keeper & Archival Historian',
     originName: 'Your Coastal Hearth',
     destinationName: 'Edinburgh (Lighthouse Haven)',
     originCoords: { x: 44, y: 35 },
@@ -189,6 +210,8 @@ export const INITIAL_PIGEONS: PigeonFlight[] = [
     letter: INITIAL_LETTERS[0],
     sender: 'Clara Vance',
     recipient: 'You',
+    recipientCompany: 'Coastal Correspondence Guild',
+    recipientPosition: 'Keeper of the Coastal Hearth',
     originName: 'Lisbon Harbor',
     destinationName: 'Your Coastal Hearth',
     originCoords: { x: 44, y: 35 },
@@ -254,8 +277,10 @@ export const INITIAL_BOTTLES: DriftBottle[] = [
     bottleSealColor: '#701a75',
     bottleSealInsignia: 'moon',
     isTaken: false,
+    targetIndustry: 'Science, Ecology & Botany',
+    targetPosition: 'Herbarium Botanist',
     journalEntries: [
-      'Bobbing through floating golden sargassum weed.',
+      'Bobbing through floating golden sargassum weed; targeted to Herbarium Botanists.',
       'A pod of pilot whales surfaced within twenty yards at dusk.',
       'Wax seal pristine despite heavy Atlantic swell.',
     ],
@@ -277,16 +302,20 @@ export const INITIAL_BOTTLES: DriftBottle[] = [
     nauticalMilesTravelled: 1650,
     discoveredAt: Date.now() - 86400000,
     discoveredBy: 'You',
+    discoveredByPosition: 'Keeper of the Coastal Hearth',
+    discoveredByCompany: 'Coastal Correspondence Guild',
     discoveredLocation: 'Shell Beach Cove',
     repliesCount: 1,
     bottleColor: '#2563eb',
     bottleSealColor: '#0f766e',
     bottleSealInsignia: 'anchor',
     isTaken: true,
+    targetIndustry: 'Maritime, Cartography & Navigation',
+    targetPosition: 'Ocean Passage Navigator',
     journalEntries: [
       'Survived a mid-Atlantic winter squall with 20-foot breakers.',
       'Passed through quiet bioluminescent waters off Madeira.',
-      'Pushed ashore at low tide onto smooth round pebbles.',
+      'Pushed ashore at low tide onto smooth round pebbles; recovered by You (Keeper of the Coastal Hearth).',
     ],
   },
   {
@@ -323,6 +352,8 @@ export const INITIAL_BOTTLES: DriftBottle[] = [
     releasedAt: Date.now() - 210 * 86400000,
     daysAdrift: 210,
     nauticalMilesTravelled: 3400,
+    targetIndustry: 'Maritime, Cartography & Navigation',
+    targetPosition: 'Ocean Passage Navigator',
     repliesCount: 0,
     journalEntries: [
       'Carried by icy green waters past towering tabular icebergs.',
@@ -509,7 +540,9 @@ export function dispatchCarrierPigeon(
   coords: { x: number; y: number },
   city: string,
   pigeonName?: string,
-  pigeonClothes?: string
+  pigeonClothes?: string,
+  recipientCompany?: string,
+  recipientPosition?: string
 ): PigeonFlight {
   const currentSeason = SEASONS[loadWorldSeasonIndex()] || SEASONS[0];
   const baseDays = Math.floor(5 + Math.random() * 10);
@@ -518,12 +551,25 @@ export function dispatchCarrierPigeon(
   const assignedName = pigeonName?.trim() || getRandomPigeonName();
   const assignedClothes = pigeonClothes || 'aviator_goggles';
 
+  const company = recipientCompany || letter.recipientCompany;
+  const position = recipientPosition || letter.recipientPosition;
+
+  const letterWithRecipient: Letter = {
+    ...letter,
+    recipient,
+    recipientCompany: company,
+    recipientPosition: position,
+    recipientLocation: city,
+  };
+
   const newFlight: PigeonFlight = {
     id: `flight-${Date.now()}`,
     letterId: letter.id,
-    letter,
+    letter: letterWithRecipient,
     sender: letter.author,
     recipient,
+    recipientCompany: company,
+    recipientPosition: position,
     originName: 'Your Coastal Hearth',
     destinationName: city,
     originCoords: { x: 44, y: 35 },
@@ -547,7 +593,7 @@ export function dispatchCarrierPigeon(
         id: `wp-init-${Date.now()}`,
         locationName: 'Home Coastal Roost',
         date: 'Day 1',
-        description: `Released ${assignedName} with letter capsule secured.`,
+        description: `Released ${assignedName} with letter capsule secured for ${recipient}${position ? ` (${position})` : ''}.`,
         weatherCondition: 'Clear skies with morning sea breeze',
         coords: { x: 44, y: 35 },
       },
@@ -561,7 +607,7 @@ export function dispatchCarrierPigeon(
   savePigeonFlights(flights);
 
   const letters = loadLetters();
-  letters.unshift(letter);
+  letters.unshift(letterWithRecipient);
   saveLetters(letters);
 
   return newFlight;
@@ -572,14 +618,25 @@ export function castBottleIntoOcean(
   isAnonymous: boolean,
   bottleColor: string = '#14b8a6',
   waxSealColor: string = '#7c2d12',
-  waxSealInsignia: string = 'swallow'
+  waxSealInsignia: string = 'swallow',
+  targetIndustry?: string,
+  targetPosition?: string
 ): DriftBottle {
   const randomCoords = getRandomOceanCoords();
+
+  const finalTargetIndustry = targetIndustry || letter.targetIndustry;
+  const finalTargetPosition = targetPosition || letter.targetPosition;
+
+  const letterWithTarget: Letter = {
+    ...letter,
+    targetIndustry: finalTargetIndustry,
+    targetPosition: finalTargetPosition,
+  };
 
   const newBottle: DriftBottle = {
     id: `bottle-${Date.now()}`,
     letterId: letter.id,
-    letter,
+    letter: letterWithTarget,
     senderName: isAnonymous ? 'An Anonymous Soul' : letter.author,
     isAnonymous,
     originCoast: 'Your Rocky Cove',
@@ -596,8 +653,12 @@ export function castBottleIntoOcean(
     bottleSealColor: waxSealColor,
     bottleSealInsignia: waxSealInsignia,
     isTaken: false,
+    targetIndustry: finalTargetIndustry,
+    targetPosition: finalTargetPosition,
     journalEntries: [
-      'Cast into the sunset surf; bobbing peacefully beyond the breakers.',
+      finalTargetIndustry && finalTargetIndustry !== 'Open to All Professions'
+        ? `Cast into the sunset surf; wax-sealed specifically for ${finalTargetPosition ? `${finalTargetPosition} in ${finalTargetIndustry}` : finalTargetIndustry}. Bobbing peacefully beyond the breakers.`
+        : 'Cast into the sunset surf; bobbing peacefully beyond the breakers.',
     ],
   };
 
@@ -606,7 +667,7 @@ export function castBottleIntoOcean(
   saveDriftBottles(bottles);
 
   const letters = loadLetters();
-  letters.unshift(letter);
+  letters.unshift(letterWithTarget);
   saveLetters(letters);
 
   return newBottle;
@@ -766,17 +827,71 @@ export function advanceWorldSimulation(days: number = 1): {
       const foundSpot = coastalHavens[Math.floor(Math.random() * coastalHavens.length)];
       strandedBottles.push(bottle);
 
+      let finderName = 'A quiet beachcomber';
+      let finderPosition = 'Coastal Observer';
+      let finderCompany = 'Shoreline Watch';
+      let matchedNote = '';
+
+      const targetInd = bottle.targetIndustry;
+      const targetPos = bottle.targetPosition;
+      const hasSpecificTarget = Boolean((targetInd && targetInd !== 'Open to All Professions') || targetPos);
+
+      if (targetInd && targetInd !== 'Open to All Professions') {
+        const matches = MATCHING_PROFESSIONALS.filter(
+          p => p.industry === targetInd || (targetPos && p.position.toLowerCase().includes(targetPos.toLowerCase()))
+        );
+        const match = matches.length > 0 ? matches[Math.floor(Math.random() * matches.length)] : null;
+        if (match) {
+          finderName = match.name;
+          finderPosition = match.position;
+          finderCompany = match.company;
+        } else {
+          finderName = 'Sarah Lindqvist';
+          finderPosition = targetPos || 'Specialist Fellow';
+          finderCompany = `${targetInd} Conservatory`;
+        }
+        matchedNote = ` (Matched profession: ${finderPosition} at ${finderCompany})`;
+      } else if (targetPos) {
+        finderName = 'Elena Thorne';
+        finderPosition = targetPos;
+        finderCompany = 'Atlantic Guild of Practitioners';
+        matchedNote = ` (Matched profession: ${finderPosition})`;
+      } else {
+        const genericFinders = [
+          { name: 'Dr. Thais Beaumont', position: 'Marine Oceanographer', company: 'Brest Hydrographic Station' },
+          { name: 'Mateo Morales', position: 'Historical Restorer', company: 'Iberian Heritage Trust' },
+          { name: 'Beatrix Shaw', position: 'Poet & Broadside Printer', company: 'Whalebone Letterpress' },
+          { name: 'Soren Lindqvist', position: 'Lighthouse Keeper', company: 'Lofoten Beacon Service' },
+        ];
+        const picked = genericFinders[Math.floor(Math.random() * genericFinders.length)];
+        finderName = picked.name;
+        finderPosition = picked.position;
+        finderCompany = picked.company;
+      }
+
       newNotifications.push({
         id: `notif-bottle-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
         type: 'bottle_washed_up',
-        title: 'A Bottle Washed Ashore & Was Taken from the Tides',
-        message: `A beachcomber along ${foundSpot} discovered your bottle, broke the wax seal, and took the letter. It is no longer floating on the map.`,
+        title: hasSpecificTarget ? 'Matching Professional Recovered Your Bottle!' : 'A Bottle Washed Ashore & Was Taken from the Tides',
+        message: hasSpecificTarget
+          ? `${finderName} (${finderPosition} at ${finderCompany}) discovered your bottle along ${foundSpot}! Because your bottle was cast specifically for ${targetPos ? `${targetPos} in ${targetInd}` : targetInd}, their coastal watch retrieved it from the tide.`
+          : `A beachcomber along ${foundSpot} (${finderName}, ${finderPosition} at ${finderCompany}) discovered your bottle, broke the wax seal, and took the letter. It is no longer floating on the map.`,
         timestamp: `Day ${newClock}`,
         dateNumber: newClock,
         letterId: bottle.letterId,
         bottleId: bottle.id,
         isRead: false,
       });
+
+      // Update letter in letters list with discoverer info
+      const letterIdx = letters.findIndex((l) => l.id === bottle.letterId);
+      if (letterIdx !== -1) {
+        letters[letterIdx] = {
+          ...letters[letterIdx],
+          discoveredByCompany: finderCompany,
+          discoveredByPosition: finderPosition,
+        };
+      }
 
       return {
         ...bottle,
@@ -786,9 +901,12 @@ export function advanceWorldSimulation(days: number = 1): {
         nauticalMilesTravelled: newMiles,
         discoveredLocation: foundSpot,
         discoveredAt: Date.now(),
+        discoveredBy: finderName,
+        discoveredByPosition: finderPosition,
+        discoveredByCompany: finderCompany,
         journalEntries: [
           ...bottle.journalEntries,
-          `Retrieved from the shore at ${foundSpot} by a quiet soul. The glass has been taken from the open tide.`,
+          `Retrieved from the shore at ${foundSpot} by ${finderName} (${finderPosition} at ${finderCompany})${matchedNote}. The glass has been taken from the open tide.`,
         ],
       };
     }

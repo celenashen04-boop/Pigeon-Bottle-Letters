@@ -5,7 +5,9 @@ export type PaperStyle =
   | 'tea-stained' 
   | 'linen' 
   | 'midnight-vellum' 
-  | 'botanical-pressed';
+  | 'botanical-pressed'
+  | 'ocean-drift'
+  | 'sea-mist';
 
 export type FontStyle = 'cursive' | 'serif' | 'typewriter';
 
@@ -40,7 +42,11 @@ export interface Letter {
   title: string;
   content: string;
   author: string;
+  authorCompany?: string;
+  authorPosition?: string;
   recipient?: string;
+  recipientCompany?: string;
+  recipientPosition?: string;
   recipientLocation?: string;
   dateCreated: string;
   paperStyle: PaperStyle;
@@ -55,6 +61,11 @@ export interface Letter {
   isRead: boolean;
   isArchived: boolean;
   isAnonymous?: boolean;
+  // Professional targeting for Ocean Bottles
+  targetIndustry?: string;
+  targetPosition?: string;
+  discoveredByPosition?: string;
+  discoveredByCompany?: string;
 }
 
 export interface Waypoint {
@@ -107,6 +118,8 @@ export interface PigeonFlight {
   letter: Letter;
   sender: string;
   recipient: string;
+  recipientCompany?: string;
+  recipientPosition?: string;
   originName: string;
   destinationName: string;
   originCoords: { x: number; y: number }; // 0-100 on map
@@ -145,6 +158,8 @@ export interface DriftBottle {
   nauticalMilesTravelled: number;
   discoveredAt?: number;
   discoveredBy?: string;
+  discoveredByPosition?: string;
+  discoveredByCompany?: string;
   discoveredLocation?: string;
   repliesCount: number;
   journalEntries: string[];
@@ -152,11 +167,15 @@ export interface DriftBottle {
   bottleSealColor?: string;
   bottleSealInsignia?: string;
   isTaken?: boolean;
+  targetIndustry?: string;
+  targetPosition?: string;
 }
 
 export interface UserContact {
   id: string;
   name: string;
+  company?: string;
+  position?: string;
   city: string;
   region: string;
   coords: { x: number; y: number };

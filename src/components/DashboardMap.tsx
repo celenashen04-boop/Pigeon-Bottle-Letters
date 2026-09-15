@@ -12,6 +12,7 @@ import {
 } from 'lucide-react';
 import { PigeonFlight, DriftBottle, Letter } from '../types';
 import { PIGEON_CLOTHING_OPTIONS, WAX_INSIGNIAS, BOTTLE_GLASS_COLORS } from '../simulation/constants';
+import { PigeonVisual } from './PigeonVisual';
 
 interface DashboardMapProps {
   pigeons: PigeonFlight[];
@@ -271,18 +272,20 @@ export const DashboardMap: React.FC<DashboardMapProps> = ({
                   strokeWidth="1.5"
                 />
                 
-                {/* Destination Label */}
-                <text
-                  x={destX}
-                  y={destY + 14}
-                  textAnchor="middle"
-                  fill="#cbd5e1"
-                  fontSize="10"
-                  fontFamily="sans-serif"
-                  opacity="0.8"
-                >
-                  {pigeon.destinationName}
-                </text>
+                {/* Destination Label - Shown on hover or selection */}
+                {(isSelected || hoveredEntity?.id === pigeon.id) && (
+                  <text
+                    x={destX}
+                    y={destY + 14}
+                    textAnchor="middle"
+                    fill="#cbd5e1"
+                    fontSize="10"
+                    fontFamily="sans-serif"
+                    opacity="0.9"
+                  >
+                    {pigeon.destinationName}
+                  </text>
+                )}
               </g>
             );
           })}
@@ -292,7 +295,7 @@ export const DashboardMap: React.FC<DashboardMapProps> = ({
         {/* INTERACTIVE MARKERS (HTML OVERLAY FOR CRISP HOVER) */}
         {/* ==================================================== */}
 
-        {/* 1. SENT PIGEONS */}
+        {/* 1. SENT PIGEONS - Just the pigeon with custom skin; details on hover */}
         {sentPigeons.map((pigeon) => {
           const letter = findLetter(pigeon.letterId);
           const clothing = getClothing(pigeon.pigeonClothes);
@@ -338,29 +341,23 @@ export const DashboardMap: React.FC<DashboardMapProps> = ({
                 <div className="absolute -inset-2 rounded-full border border-amber-400/40 animate-ping pointer-events-none" />
               )}
 
-              {/* Pigeon Badge */}
+              {/* Pigeon with custom skin only */}
               <div 
-                className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-serif-vintage font-bold shadow-2xl border transition-all ${
-                  isDelivered
-                    ? 'bg-[#064e3b]/90 text-[#a7f3d0] border-[#10b981]'
-                    : 'bg-[#451a03]/90 text-[#fef3c7] border-[#f59e0b] animate-bounce-subtle'
-                } ${isSelected ? 'ring-2 ring-amber-300 scale-110' : 'hover:scale-110'}`}
+                className={`relative flex items-center justify-center transition-transform duration-300 ${
+                  isSelected ? 'scale-125 filter drop-shadow-[0_0_10px_rgba(251,191,36,0.9)]' : 'hover:scale-125'
+                }`}
               >
-                <span className="text-sm">{clothing.icon}</span>
-                <span className="truncate max-w-[80px] sm:max-w-[110px]">
-                  {pigeon.pigeonName || 'Homer'}
-                </span>
-                {isDelivered && (
-                  <span className="text-[10px] bg-[#10b981] text-[#064e3b] px-1 rounded-sm font-sans font-bold">
-                    ✓
-                  </span>
-                )}
+                <PigeonVisual
+                  attireId={pigeon.pigeonClothes}
+                  size="sm"
+                  animated={!isDelivered}
+                />
               </div>
             </div>
           );
         })}
 
-        {/* 2. SENT OCEAN BOTTLES (ONLY ADRIFT; DISAPPEAR WHEN TAKEN) */}
+        {/* 2. SENT OCEAN BOTTLES - Bottle emoji only; details on hover */}
         {activeFloatingBottles.map((bottle) => {
           const letter = findLetter(bottle.letterId);
           const insignia = getInsignia(bottle.waxSealInsignia);
@@ -396,28 +393,18 @@ export const DashboardMap: React.FC<DashboardMapProps> = ({
             >
               {/* Oceanic Ripple */}
               <div 
-                className="absolute -inset-3 rounded-full border opacity-40 animate-pulse pointer-events-none"
+                className="absolute -inset-2 rounded-full border opacity-40 animate-pulse pointer-events-none"
                 style={{ borderColor: glassColor }}
               />
 
-              {/* Floating Bottle Badge */}
+              {/* Bottle emoji only */}
               <div 
-                className={`flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-serif-vintage font-bold shadow-2xl border transition-all bg-[#0d1e26]/90 ${
-                  isSelected ? 'ring-2 ring-cyan-300 scale-110' : 'hover:scale-110'
+                className={`relative flex items-center justify-center text-2xl select-none transition-transform duration-300 ${
+                  isSelected ? 'scale-125 filter drop-shadow-[0_0_12px_rgba(56,189,248,0.9)]' : 'hover:scale-125'
                 }`}
-                style={{ borderColor: glassColor, color: '#e0f2fe' }}
               >
-                <div 
-                  className="w-3.5 h-3.5 rounded-full flex items-center justify-center text-[9px] shadow-sm"
-                  style={{ backgroundColor: glassColor }}
-                >
-                  {insignia.symbol}
-                </div>
-                <span className="truncate max-w-[70px] sm:max-w-[100px]">
-                  Drift Bottle
-                </span>
-                <span className="text-[10px] opacity-75 font-mono">
-                  {bottle.daysAdrift}d
+                <span className="inline-block filter drop-shadow-[0_2px_5px_rgba(0,0,0,0.7)] animate-bounce-subtle">
+                  🍾
                 </span>
               </div>
             </div>
@@ -461,7 +448,7 @@ export const DashboardMap: React.FC<DashboardMapProps> = ({
                 The Skies & Tides Await Dispatches
               </h4>
               <p className="text-xs text-[#94a3b8] font-serif-vintage leading-relaxed">
-                Click "Attach Letter to Homer" or cast an ocean bottle to begin tracking your dispatches across the world map.
+                Click "Send Letter with Pigeon" or cast an ocean bottle to begin tracking your dispatches across the world map.
               </p>
             </div>
           </div>

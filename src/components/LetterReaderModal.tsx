@@ -12,11 +12,13 @@ import {
   Loader2,
   Calendar,
   MapPin,
-  Heart
+  Heart,
+  Briefcase
 } from 'lucide-react';
 import { Letter, PostalStamp, StampReaction, DriftBottle, PigeonFlight } from '../types';
 import { POSTAL_STAMPS } from '../simulation/constants';
 import { playWaxSealThud } from '../utils/ambientAudio';
+import { getPaperThemeClasses, getAccessibleInk } from '../utils/contrast';
 
 interface LetterReaderModalProps {
   letter: Letter | null;
@@ -116,47 +118,64 @@ export const LetterReaderModal: React.FC<LetterReaderModalProps> = ({
   const getFontClass = () => {
     switch (letter.fontStyle) {
       case 'cursive': return 'font-handwriting text-2xl leading-relaxed';
-      case 'serif': return 'font-serif-vintage text-lg leading-relaxed';
+      case 'serif': return 'font-garamond text-lg leading-relaxed';
       case 'typewriter': return 'font-typewriter text-base leading-relaxed';
     }
   };
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-2 sm:p-4 overflow-y-auto">
-      <div 
-        className="bg-[#211a14] border border-[#4a3a2c] rounded-2xl max-w-3xl w-full p-4 sm:p-6 text-[#ded0bf] paper-shadow-deep relative my-6"
-        onClick={(e) => e.stopPropagation()}
-      >
-        {/* Header Bar */}
-        <div className="flex items-center justify-between pb-3 border-b border-[#3b2e23] mb-4">
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl bg-[#362b21] border border-[#524131] flex items-center justify-center text-[#e0af68]">
-              {letter.deliveryMode === 'pigeon' ? <Feather className="w-4 h-4" /> : <Waves className="w-4 h-4" />}
-            </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="text-xs uppercase tracking-wider font-semibold text-[#c8b29c]">
-                  {letter.deliveryMode === 'pigeon' ? 'Carrier Pigeon Dispatch' : 'Ocean Drift Scroll'}
-                </span>
-                <span className="text-[11px] px-2 py-0.5 rounded-full bg-[#32271d] text-[#b39d88] border border-[#48382a]">
-                  {letter.dateCreated}
-                </span>
+    <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md overflow-y-auto">
+      {/* Centering wrapper with generous padding to prevent top content clipping */}
+      <div className="min-h-full flex items-start justify-center p-2 sm:p-4 pt-6 sm:pt-10 pb-16">
+        <div 
+          className="bg-[#211a14] border border-[#4a3a2c] rounded-2xl max-w-3xl w-full p-4 sm:p-6 text-[#ded0bf] paper-shadow-deep relative shadow-2xl"
+          onClick={(e) => e.stopPropagation()}
+        >
+          {/* Header Bar */}
+          <div className="flex items-center justify-between pb-3 border-b border-[#3b2e23] mb-4">
+            <div className="flex items-center gap-3">
+              <div className="w-9 h-9 rounded-xl bg-[#362b21] border border-[#524131] flex items-center justify-center text-[#e0af68]">
+                {letter.deliveryMode === 'pigeon' ? <Feather className="w-4 h-4" /> : <Waves className="w-4 h-4" />}
               </div>
-              <p className="text-xs text-[#9d8975] font-serif-vintage">
-                From {letter.author} {letter.recipientLocation ? `→ ${letter.recipientLocation}` : ''}
-              </p>
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="text-xs uppercase tracking-wider font-semibold text-[#c8b29c]">
+                    {letter.deliveryMode === 'pigeon' ? 'Carrier Pigeon Dispatch' : 'Ocean Drift Scroll'}
+                  </span>
+                  <span className="text-[11px] px-2 py-0.5 rounded-full bg-[#32271d] text-[#b39d88] border border-[#48382a]">
+                    {letter.dateCreated}
+                  </span>
+                </div>
+                <p className="text-xs text-[#9d8975] font-serif-vintage flex items-center gap-1.5 flex-wrap mt-0.5">
+                  <span>From <strong className="text-[#ded0bf] font-normal">{letter.author}</strong>
+                    {letter.authorPosition ? ` (${letter.authorPosition}${letter.authorCompany ? `, ${letter.authorCompany}` : ''})` : ''}
+                  </span>
+                  <span>→</span>
+                  <span>{letter.recipient}
+                    {letter.recipientPosition ? ` (${letter.recipientPosition}${letter.recipientCompany ? `, ${letter.recipientCompany}` : ''})` : ''}
+                  </span>
+                  {letter.recipientLocation ? <span className="text-[#847464]">({letter.recipientLocation})</span> : null}
+                </p>
+
+                {/* Exclusive Career Targeting Callout */}
+                {(letter.targetIndustry || letter.targetPosition) && (
+                  <div className="mt-1.5 inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-[#0e2736] border border-[#0284c7]/40 text-[#7dd3fc] text-[11px]">
+                    <Briefcase className="w-3 h-3 text-[#38bdf8]" />
+                    <span>Exclusive Career Calling: <strong>{letter.targetPosition || 'Specialist'}</strong> in <em>{letter.targetIndustry}</em></span>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div className="flex items-center gap-2">
+              <button
+                onClick={onClose}
+                className="p-1.5 rounded-lg text-[#9d8975] hover:text-[#f2e6d6] hover:bg-[#34281f] transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
             </div>
           </div>
-
-          <div className="flex items-center gap-2">
-            <button
-              onClick={onClose}
-              className="p-1.5 rounded-lg text-[#9d8975] hover:text-[#f2e6d6] hover:bg-[#34281f] transition-colors"
-            >
-              <X className="w-5 h-5" />
-            </button>
-          </div>
-        </div>
 
         {/* AI Exploration Bar */}
         <div className="flex flex-wrap items-center justify-between gap-2 mb-4 bg-[#191410] px-3 py-2 rounded-xl border border-[#382b1f]">
@@ -232,124 +251,129 @@ export const LetterReaderModal: React.FC<LetterReaderModalProps> = ({
         )}
 
         {/* The Open Letter Canvas */}
-        <div 
-          className={`rounded-2xl p-6 sm:p-10 paper-shadow border relative overflow-hidden transition-all duration-300 ${
-            letter.paperStyle === 'parchment' ? 'bg-parchment text-[#28211b] border-[#cfbea0]' :
-            letter.paperStyle === 'tea-stained' ? 'bg-tea-stained text-[#261f18] border-[#c4b18f]' :
-            letter.paperStyle === 'linen' ? 'bg-linen text-[#2d2620] border-[#d8cbbb]' :
-            letter.paperStyle === 'midnight-vellum' ? 'bg-midnight-vellum text-[#e2e8f0] border-[#32394a]' :
-            'bg-botanical-pressed text-[#252a20] border-[#c5d0ba]'
-          }`}
-        >
-          {/* Top Header: Stamps & Keepsake badge */}
-          <div className="flex items-start justify-between gap-4 border-b border-black/10 pb-4 mb-6">
-            <div>
-              {letter.title && (
-                <h3 className="font-display font-bold text-xl sm:text-2xl tracking-tight mb-1">
-                  {letter.title}
-                </h3>
+        {(() => {
+          const paperTheme = getPaperThemeClasses(letter.paperStyle);
+          const effectiveInk = getAccessibleInk(letter.paperStyle, letter.inkColor);
+
+          return (
+            <div 
+              className={`rounded-2xl p-6 sm:p-10 paper-shadow border relative overflow-hidden transition-all duration-300 ${paperTheme.container}`}
+            >
+              {/* Top Header: Stamps & Keepsake badge */}
+              <div className={`flex items-start justify-between gap-4 border-b pb-4 mb-6 ${paperTheme.divider}`}>
+                <div>
+                  {letter.title && (
+                    <h3 className={`font-display font-bold text-xl sm:text-2xl tracking-tight mb-1 ${paperTheme.title}`}>
+                      {letter.title}
+                    </h3>
+                  )}
+                  <div className={`text-xs font-serif-vintage italic ${paperTheme.meta}`}>
+                    Penned by {letter.author}
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  {/* Attached Keepsake badge if bottle letter */}
+                  {letter.keepsake && (
+                    <div className={`hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-serif-vintage ${paperTheme.badge}`}>
+                      <span>✦ Enclosed:</span>
+                      <span className="font-bold">{letter.keepsake.name}</span>
+                    </div>
+                  )}
+
+                  {/* Postal Stamps */}
+                  {letter.stamps?.map((st) => (
+                    <div 
+                      key={st.id}
+                      className="w-11 h-14 rounded border-2 border-dashed flex flex-col items-center justify-between p-1 text-[9px] font-mono shadow-sm"
+                      style={{ backgroundColor: st.color + '22', borderColor: st.color }}
+                      title={`${st.name} — "${st.quote}"`}
+                    >
+                      <span className="font-bold">{st.denomination}</span>
+                      <Stamp className="w-4 h-4 opacity-85" style={{ color: st.color }} />
+                      <span className="text-[8px] uppercase tracking-tighter truncate w-full text-center">Post</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Letter Body */}
+              <div 
+                className={`whitespace-pre-wrap ${getFontClass()} my-4 min-h-[140px] text-base leading-relaxed ${paperTheme.body}`}
+                style={{ color: effectiveInk }}
+              >
+                {translatedContent || letter.content}
+              </div>
+
+              {translatedContent && (
+                <div className={`mt-4 pt-2 border-t text-xs italic font-serif-vintage flex items-center justify-between opacity-80 ${paperTheme.divider} ${paperTheme.meta}`}>
+                  <span>Translated into {targetLang} with preserved cadence</span>
+                  <button 
+                    onClick={() => setTranslatedContent(null)}
+                    className="underline hover:opacity-100 font-semibold"
+                  >
+                    Revert to Original
+                  </button>
+                </div>
               )}
-              <div className="text-xs font-serif-vintage italic opacity-75">
-                Penned by {letter.author}
+
+              {/* Attached Keepsake detail banner on mobile */}
+              {letter.keepsake && (
+                <div className={`sm:hidden mt-4 p-2.5 rounded-lg text-xs font-serif-vintage ${paperTheme.badge}`}>
+                  <span className="font-bold">✦ Enclosed Keepsake: {letter.keepsake.name}</span>
+                  <p className="italic text-[11px] mt-0.5 opacity-80">{letter.keepsake.lore}</p>
+                </div>
+              )}
+
+              {/* Wax Seal Insignia & Letter Reactions */}
+              <div className={`mt-8 pt-4 border-t flex flex-wrap items-center justify-between gap-4 ${paperTheme.divider}`}>
+                
+                {/* Margin Stamp Reactions */}
+                <div className="flex items-center gap-2 flex-wrap">
+                  <span className={`text-xs font-serif-vintage ${paperTheme.meta}`}>Stamps Affixed:</span>
+                  
+                  {letter.reactions && letter.reactions.length > 0 ? (
+                    letter.reactions.map((rx) => (
+                      <div 
+                        key={rx.id}
+                        className={`flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-serif-vintage ${paperTheme.badge}`}
+                        title={rx.note ? `Note: "${rx.note}"` : undefined}
+                      >
+                        <Stamp className="w-3.5 h-3.5 text-amber-600" />
+                        <span>{rx.stampName}</span>
+                        {rx.note && <span className="italic text-[10px] opacity-75">("{rx.note}")</span>}
+                      </div>
+                    ))
+                  ) : (
+                    <span className={`text-xs italic font-serif-vintage ${paperTheme.meta}`}>No stamps affixed yet</span>
+                  )}
+
+                  {/* Add Stamp Reaction Button */}
+                  <button
+                    type="button"
+                    onClick={() => setShowStampPicker(!showStampPicker)}
+                    className={`text-xs px-2.5 py-1 rounded-md font-serif-vintage border flex items-center gap-1 transition-colors ${
+                      paperTheme.isDark 
+                        ? 'bg-white/10 hover:bg-white/20 text-white border-white/25' 
+                        : 'bg-black/5 hover:bg-black/10 text-[#1c1917] border-black/20'
+                    }`}
+                  >
+                    + Affix Stamp Reaction
+                  </button>
+                </div>
+
+                {/* Wax Seal Stamp */}
+                <div 
+                  className="w-12 h-12 rounded-full flex items-center justify-center text-white text-base font-cinzel font-bold shadow-lg border-2 border-amber-100/30"
+                  style={{ backgroundColor: letter.sealColor || '#7c2d12' }}
+                  title="Wax seal unbroken upon arrival"
+                >
+                  {letter.deliveryMode === 'bottle' ? '🍾' : '🕊️'}
+                </div>
               </div>
             </div>
-
-            <div className="flex items-center gap-2">
-              {/* Attached Keepsake badge if bottle letter */}
-              {letter.keepsake && (
-                <div className="hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full bg-black/5 border border-black/15 text-xs font-serif-vintage">
-                  <span>✦ Enclosed:</span>
-                  <span className="font-bold">{letter.keepsake.name}</span>
-                </div>
-              )}
-
-              {/* Postal Stamps */}
-              {letter.stamps?.map((st) => (
-                <div 
-                  key={st.id}
-                  className="w-11 h-14 rounded border-2 border-dashed flex flex-col items-center justify-between p-1 text-[9px] font-mono shadow-sm"
-                  style={{ backgroundColor: st.color + '22', borderColor: st.color }}
-                  title={`${st.name} — "${st.quote}"`}
-                >
-                  <span className="font-bold">{st.denomination}</span>
-                  <Stamp className="w-4 h-4 opacity-85" style={{ color: st.color }} />
-                  <span className="text-[8px] uppercase tracking-tighter truncate w-full text-center">Post</span>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Letter Body */}
-          <div 
-            className={`whitespace-pre-wrap ${getFontClass()} my-4 min-h-[140px]`}
-            style={{ color: letter.inkColor || '#292524' }}
-          >
-            {translatedContent || letter.content}
-          </div>
-
-          {translatedContent && (
-            <div className="mt-4 pt-2 border-t border-black/10 text-xs italic font-serif-vintage flex items-center justify-between opacity-70">
-              <span>Translated into {targetLang} with preserved emotional cadence</span>
-              <button 
-                onClick={() => setTranslatedContent(null)}
-                className="underline hover:opacity-100"
-              >
-                Revert to Original
-              </button>
-            </div>
-          )}
-
-          {/* Attached Keepsake detail banner on mobile */}
-          {letter.keepsake && (
-            <div className="sm:hidden mt-4 p-2.5 rounded-lg bg-black/5 border border-black/10 text-xs font-serif-vintage">
-              <span className="font-bold">✦ Enclosed Keepsake: {letter.keepsake.name}</span>
-              <p className="opacity-75 italic text-[11px] mt-0.5">{letter.keepsake.lore}</p>
-            </div>
-          )}
-
-          {/* Wax Seal Insignia & Letter Reactions */}
-          <div className="mt-8 pt-4 border-t border-black/10 flex flex-wrap items-center justify-between gap-4">
-            
-            {/* Margin Stamp Reactions */}
-            <div className="flex items-center gap-2 flex-wrap">
-              <span className="text-xs font-serif-vintage opacity-75">Stamps Affixed:</span>
-              
-              {letter.reactions && letter.reactions.length > 0 ? (
-                letter.reactions.map((rx) => (
-                  <div 
-                    key={rx.id}
-                    className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-black/5 border border-black/15 text-xs font-serif-vintage"
-                    title={rx.note ? `Note: "${rx.note}"` : undefined}
-                  >
-                    <Stamp className="w-3.5 h-3.5 text-amber-700" />
-                    <span>{rx.stampName}</span>
-                    {rx.note && <span className="italic text-[10px] opacity-70">("{rx.note}")</span>}
-                  </div>
-                ))
-              ) : (
-                <span className="text-xs italic opacity-60 font-serif-vintage">No stamps affixed yet</span>
-              )}
-
-              {/* Add Stamp Reaction Button */}
-              <button
-                type="button"
-                onClick={() => setShowStampPicker(!showStampPicker)}
-                className="text-xs px-2.5 py-1 rounded-md bg-black/10 hover:bg-black/15 text-black/80 font-serif-vintage border border-black/15 flex items-center gap-1 transition-colors"
-              >
-                + Affix Stamp Reaction
-              </button>
-            </div>
-
-            {/* Wax Seal Stamp */}
-            <div 
-              className="w-12 h-12 rounded-full flex items-center justify-center text-white text-base font-cinzel font-bold shadow-lg border-2 border-amber-100/30"
-              style={{ backgroundColor: letter.sealColor || '#7c2d12' }}
-              title="Wax seal unbroken upon arrival"
-            >
-              D
-            </div>
-          </div>
-        </div>
+          );
+        })()}
 
         {/* Vintage Stamp Picker Popover */}
         {showStampPicker && (
@@ -447,5 +471,6 @@ export const LetterReaderModal: React.FC<LetterReaderModalProps> = ({
 
       </div>
     </div>
-  );
+  </div>
+);
 };

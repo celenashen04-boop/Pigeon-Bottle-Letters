@@ -3,14 +3,20 @@
 @layer base {
   body {
     background-color: #171412;
-    color: #2c2520;
-    font-family: 'EB Garamond', Georgia, serif;
+    color: #ded0bf;
+    font-family: 'Plus Jakarta Sans', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
   }
 }
 
 /* Custom Typography Utilities */
+/* Non-header vintage / body text - uses clean, legible sans-serif */
 .font-serif-vintage {
+  font-family: 'Plus Jakarta Sans', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+/* Classical Monastic serif option for letter paper writing */
+.font-garamond {
   font-family: 'EB Garamond', Georgia, serif;
 }
 
@@ -61,6 +67,25 @@
   background-color: #f4f6ee;
   background-image: radial-gradient(#d1dbc2 0.8px, transparent 0.8px);
   background-size: 24px 24px;
+}
+
+.bg-ocean-drift {
+  background-color: #0b1e2c;
+  background-image: 
+    radial-gradient(ellipse at 80% 20%, rgba(56, 189, 248, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 20% 80%, rgba(2, 132, 199, 0.14) 0%, transparent 60%),
+    radial-gradient(#1e3b52 0.75px, #0b1e2c 0.75px);
+  background-size: 100% 100%, 100% 100%, 26px 26px;
+  color: #e0f2fe;
+}
+
+.bg-sea-mist {
+  background-color: #f0f8fb;
+  background-image: 
+    radial-gradient(ellipse at 50% 0%, rgba(14, 165, 233, 0.08) 0%, transparent 70%),
+    radial-gradient(#b8d8e6 0.75px, transparent 0.75px);
+  background-size: 100% 100%, 28px 28px;
+  color: #0c2b3d;
 }
 
 .bg-wood-desk {

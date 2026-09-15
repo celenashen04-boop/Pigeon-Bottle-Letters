@@ -182,16 +182,18 @@ export default function App() {
     persistState(pigeonFlights, bottles, updatedLetters, notifications, currentSeason, dayCount);
   };
 
-  // Send Pigeon with assigned name and clothes
+  // Send Pigeon with assigned name, clothes, and recipient position
   const handleSendPigeon = (
     newLetter: Letter, 
     recipient: string, 
     coords: { x: number; y: number }, 
     city: string,
     pigeonName?: string,
-    pigeonClothes?: string
+    pigeonClothes?: string,
+    recipientCompany?: string,
+    recipientPosition?: string
   ) => {
-    const flight = dispatchCarrierPigeon(newLetter, recipient, coords, city, pigeonName, pigeonClothes);
+    const flight = dispatchCarrierPigeon(newLetter, recipient, coords, city, pigeonName, pigeonClothes, recipientCompany, recipientPosition);
     const updatedFlights = [flight, ...pigeonFlights];
     const updatedLetters = [newLetter, ...letters];
 
@@ -199,19 +201,22 @@ export default function App() {
     setLetters(updatedLetters);
     persistState(updatedFlights, bottles, updatedLetters, notifications, currentSeason, dayCount);
 
-    setEventNotice(`🕊️ Carrier pigeon "${flight.pigeonName || 'Homer'}" released toward ${city}. Flight path plotted on the map.`);
+    const posTag = recipientPosition ? ` (${recipientPosition})` : '';
+    setEventNotice(`🕊️ Carrier pigeon "${flight.pigeonName || 'Homer'}" released toward ${recipient}${posTag} in ${city}. Flight path plotted on the map.`);
     setTimeout(() => setEventNotice(null), 5000);
   };
 
-  // Cast Bottle into Ocean with glass color and wax seal
+  // Cast Bottle into Ocean with glass color, wax seal, and targeted career fields
   const handleCastBottle = (
     newLetter: Letter, 
     isAnonymous: boolean,
     bottleColor?: string,
     waxSealColor?: string,
-    waxSealInsignia?: string
+    waxSealInsignia?: string,
+    targetIndustry?: string,
+    targetPosition?: string
   ) => {
-    const bottle = castBottleIntoOcean(newLetter, isAnonymous, bottleColor, waxSealColor, waxSealInsignia);
+    const bottle = castBottleIntoOcean(newLetter, isAnonymous, bottleColor, waxSealColor, waxSealInsignia, targetIndustry, targetPosition);
     const updatedBottles = [bottle, ...bottles];
     const updatedLetters = [newLetter, ...letters];
 
@@ -219,8 +224,12 @@ export default function App() {
     setLetters(updatedLetters);
     persistState(pigeonFlights, updatedBottles, updatedLetters, notifications, currentSeason, dayCount);
 
-    setEventNotice(`🌊 Drift bottle sealed and cast adrift into ocean gyres. Track its location on the map until taken.`);
-    setTimeout(() => setEventNotice(null), 5000);
+    const targetDesc = targetPosition 
+      ? `targeting ${targetPosition} (${targetIndustry || 'specialized field'})`
+      : (targetIndustry && targetIndustry !== 'Open to All Professions' ? `targeting ${targetIndustry}` : 'into open oceanic gyres');
+
+    setEventNotice(`🌊 Drift bottle sealed and cast ${targetDesc}. Tracking buoy active on world chart.`);
+    setTimeout(() => setEventNotice(null), 5500);
   };
 
   // -------------------------------------------------------------
@@ -342,7 +351,7 @@ export default function App() {
         </section>
 
         {/* ============================================================ */}
-        {/* 2. WRITE A NEW LETTER BUTTON ("Attach letter to homer")      */}
+        {/* 2. WRITE A NEW LETTER BUTTON ("Send Letter with Pigeon")     */}
         {/* ============================================================ */}
         <section className="flex flex-col sm:flex-row items-center justify-between gap-4 bg-gradient-to-r from-[#241a13] via-[#2c1d14] to-[#1a1410] border border-[#543b2a] rounded-2xl p-4 sm:p-5 shadow-lg">
           <div>
@@ -356,21 +365,21 @@ export default function App() {
           </div>
 
           <div className="flex items-center gap-3 w-full sm:w-auto">
-            {/* Primary button keeping exact user requested label: "attach letter to homer" */}
+            {/* Primary button: "Send Letter with Pigeon" */}
             <button
               type="button"
               onClick={() => handleOpenWriteModal('pigeon')}
-              className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#8a3318] to-[#611e10] text-[#fef9f3] text-sm font-serif-vintage font-bold tracking-wide border border-[#b44828] shadow-xl hover:brightness-110 active:scale-95 transition-all"
+              className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#8a3318] to-[#611e10] text-[#fef9f3] text-sm font-bold tracking-wide border border-[#b44828] shadow-xl hover:brightness-110 active:scale-95 transition-all cursor-pointer"
             >
               <Feather className="w-4 h-4 text-[#fde68a]" />
-              <span>Attach Letter to Homer</span>
+              <span>Send Letter with Pigeon</span>
             </button>
 
-            {/* Companion Bottle Button */}
+            {/* Companion Bottle Button - increased to identical size as Send Letter with Pigeon */}
             <button
               type="button"
               onClick={() => handleOpenWriteModal('bottle')}
-              className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-[#142833] hover:bg-[#1a3544] text-[#bae6fd] text-xs font-serif-vintage font-bold border border-[#2563eb]/40 shadow transition-all active:scale-95"
+              className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-[#0c2f45] to-[#071f2e] hover:from-[#103a55] hover:to-[#0a273b] text-[#f0f9ff] text-sm font-bold tracking-wide border border-[#38bdf8]/60 shadow-xl hover:brightness-110 active:scale-95 transition-all cursor-pointer"
             >
               <Waves className="w-4 h-4 text-[#38bdf8]" />
               <span>Cast Ocean Bottle</span>

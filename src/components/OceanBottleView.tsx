@@ -8,10 +8,11 @@ import {
   ChevronRight, 
   Search, 
   Plus, 
-  Anchor,
-  Clock,
-  Archive,
-  Shell
+  Anchor, 
+  Clock, 
+  Archive, 
+  Shell,
+  Briefcase
 } from 'lucide-react';
 import { DriftBottle, Letter } from '../types';
 import { beachcombShore } from '../simulation/worldEngine';
@@ -323,6 +324,18 @@ export const OceanBottleView: React.FC<OceanBottleViewProps> = ({
                         <div className="text-[11px] text-[#7fa3b7] font-serif-vintage">
                           {b.isAnonymous ? 'From an Anonymous Soul' : `From ${b.senderName}`} · {b.daysAdrift} days at sea
                         </div>
+                        {b.discoveredBy && (
+                          <div className="text-[10px] text-[#34d399] font-serif-vintage mt-0.5">
+                            Recovered by {b.discoveredBy}
+                            {b.discoveredByPosition ? ` (${b.discoveredByPosition})` : ''}
+                          </div>
+                        )}
+                        {(b.targetIndustry || b.targetPosition) && (
+                          <div className="mt-1 flex items-center gap-1 text-[10px] text-[#38bdf8] font-mono">
+                            <Briefcase className="w-2.5 h-2.5" />
+                            <span>{b.targetPosition ? `${b.targetPosition} · ` : ''}{b.targetIndustry}</span>
+                          </div>
+                        )}
                       </div>
                     </div>
 
@@ -362,6 +375,12 @@ export const OceanBottleView: React.FC<OceanBottleViewProps> = ({
                   <p className="text-[#8cb1c4] text-[11px] font-serif-vintage italic">
                     Drifting in {b.currentOceanRegion} ({b.daysAdrift} days adrift)
                   </p>
+                  {(b.targetIndustry || b.targetPosition) && (
+                    <div className="mt-1 inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-[#0b2836] border border-[#0284c7]/40 text-[10px] text-[#38bdf8] font-mono">
+                      <Briefcase className="w-2.5 h-2.5" />
+                      <span>Targeting: {b.targetPosition ? `${b.targetPosition} · ` : ''}{b.targetIndustry}</span>
+                    </div>
+                  )}
                   {b.letter.keepsake && (
                     <div className="mt-1 text-[10px] text-[#67e8f9] font-serif-vintage">
                       ✦ Keepsake enclosed: {b.letter.keepsake.name}

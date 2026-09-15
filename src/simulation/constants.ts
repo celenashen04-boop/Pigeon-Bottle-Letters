@@ -294,6 +294,8 @@ export const DEFAULT_CONTACTS: UserContact[] = [
   {
     id: 'contact-clara',
     name: 'Clara Vance',
+    company: 'Lisbon Botanical Institute',
+    position: 'Lead Herbarium Researcher',
     city: 'Lisbon',
     region: 'Tagus Estuary, Portugal',
     coords: { x: 44, y: 35 },
@@ -304,6 +306,8 @@ export const DEFAULT_CONTACTS: UserContact[] = [
   {
     id: 'contact-julian',
     name: 'Julian Thorne',
+    company: 'Northern Lighthouse Board',
+    position: 'Chief Keeper & Archival Historian',
     city: 'Edinburgh',
     region: 'Firth of Forth, Scotland',
     coords: { x: 47, y: 22 },
@@ -314,6 +318,8 @@ export const DEFAULT_CONTACTS: UserContact[] = [
   {
     id: 'contact-moriko',
     name: 'Moriko Tanaka',
+    company: 'Kamo River Ceramic Studios',
+    position: 'Master Ceramicist & Kiln Director',
     city: 'Kyoto',
     region: 'Kamo River Basin, Japan',
     coords: { x: 82, y: 39 },
@@ -324,6 +330,8 @@ export const DEFAULT_CONTACTS: UserContact[] = [
   {
     id: 'contact-silas',
     name: 'Silas Ward',
+    company: 'Atlantic Cartography Bureau',
+    position: 'Senior Maritime Hydrographer',
     city: 'Halifax',
     region: 'Nova Scotia, Canada',
     coords: { x: 30, y: 32 },
@@ -334,12 +342,232 @@ export const DEFAULT_CONTACTS: UserContact[] = [
   {
     id: 'contact-maya',
     name: 'Maya Ruiz',
+    company: 'Valparaíso Press Guild',
+    position: 'Principal Bookbinder & Conservator',
     city: 'Valparaíso',
     region: 'Cerro Alegre, Chile',
     coords: { x: 33, y: 78 },
     lastLetterDate: '5 months ago',
     lettersExchanged: 1,
     relation: 'Poet & bookbinder',
+  },
+];
+
+export const CAREER_INDUSTRIES = [
+  'Open to All Professions',
+  'Software & Technology',
+  'Architecture & Spatial Design',
+  'Medicine & Healthcare',
+  'Literature & Publishing',
+  'Science, Ecology & Botany',
+  'Craftsmanship & Artisan Trades',
+  'Maritime, Cartography & Navigation',
+  'Arts, Music & Film',
+  'Finance, Law & Governance',
+  'Philosophy & Education',
+] as const;
+
+export const CAREER_POSITIONS_BY_INDUSTRY: Record<string, string[]> = {
+  'Software & Technology': [
+    'Senior Software Engineer',
+    'Distributed Systems Architect',
+    'Open-Source Maintainer',
+    'Product Designer',
+    'AI Systems Researcher',
+    'Security Cryptographer',
+  ],
+  'Architecture & Spatial Design': [
+    'Principal Architect',
+    'Landscape Urbanist',
+    'Historical Restorer',
+    'Timber Frame Craftsman',
+    'Interior Acoustic Designer',
+  ],
+  'Medicine & Healthcare': [
+    'Emergency Trauma Physician',
+    'Holistic Apothecary & Herbalist',
+    'Clinical Neuroscientist',
+    'Midwife & Care Practitioner',
+    'Chief Medical Officer',
+  ],
+  'Literature & Publishing': [
+    'Literary Novelist',
+    'Independent Book Publisher',
+    'Poet & Broadside Printer',
+    'Manuscript Editor',
+    'Archival Essayist',
+  ],
+  'Science, Ecology & Botany': [
+    'Marine Oceanographer',
+    'Herbarium Botanist',
+    'Glaciologist & Climate Observer',
+    'Mycology Researcher',
+    'Astrophysicist',
+  ],
+  'Craftsmanship & Artisan Trades': [
+    'Master Ceramicist',
+    'Heritage Blacksmith',
+    'Bookbinder & Leatherworker',
+    'Master Horologist (Watchmaker)',
+    'Loom Weaver & Textile Dyer',
+  ],
+  'Maritime, Cartography & Navigation': [
+    'Lighthouse Keeper',
+    'Deep-Water Harbor Pilot',
+    'Nautical Cartographer',
+    'Wooden Vessel Shipwright',
+    'Ocean Passage Navigator',
+  ],
+  'Arts, Music & Film': [
+    'Acoustic Composer',
+    'Botanical Illustrator',
+    'Cinematographer & Documentarian',
+    'Printmaker & Etcher',
+    'Sculptor & Stonemason',
+  ],
+  'Finance, Law & Governance': [
+    'Public Interest Advocate',
+    'Sustainable Finance Steward',
+    'Diplomatic Envoy',
+    'Maritime Trade Arbitrator',
+    'Civic Urban Planner',
+  ],
+  'Philosophy & Education': [
+    'University Professor',
+    'Philosophy Fellow',
+    'Librarian & Rare Books Curator',
+    'Montessori Educator',
+    'Natural History Docent',
+  ],
+};
+
+export interface MatchingProfessional {
+  name: string;
+  position: string;
+  company: string;
+  industry: string;
+  location: string;
+}
+
+export const MATCHING_PROFESSIONALS: MatchingProfessional[] = [
+  {
+    name: 'Ada Lovelace-Vance',
+    position: 'Distributed Systems Architect',
+    company: 'Open Kernel Conservatory',
+    industry: 'Software & Technology',
+    location: 'Cambridge Observatory Cove',
+  },
+  {
+    name: 'Linus Sterling',
+    position: 'Senior Software Engineer',
+    company: 'Northern Lights Computing Guild',
+    industry: 'Software & Technology',
+    location: 'Reykjavik Fjord Haven',
+  },
+  {
+    name: 'Siddharth Rao',
+    position: 'Open-Source Maintainer',
+    company: 'Global Network Fellowship',
+    industry: 'Software & Technology',
+    location: 'Goa Coastal Bay',
+  },
+  {
+    name: 'Evelyn St. Claire',
+    position: 'Principal Architect',
+    company: 'Atelier St. Claire',
+    industry: 'Architecture & Spatial Design',
+    location: 'Sintra Granite Cliffs',
+  },
+  {
+    name: 'Mateo Morales',
+    position: 'Historical Restorer',
+    company: 'Iberian Heritage Trust',
+    industry: 'Architecture & Spatial Design',
+    location: 'Seville Riverbank Basin',
+  },
+  {
+    name: 'Dr. Aris Thorne',
+    position: 'Emergency Trauma Physician',
+    company: 'Royal Infirmary of Edinburgh',
+    industry: 'Medicine & Healthcare',
+    location: 'Firth of Forth Haven',
+  },
+  {
+    name: 'Dr. Amara Sen',
+    position: 'Clinical Neuroscientist',
+    company: 'Cerebral Dynamics Institute',
+    industry: 'Medicine & Healthcare',
+    location: 'Kerala Backwaters Clinic',
+  },
+  {
+    name: 'Cassian Vane',
+    position: 'Manuscript Editor',
+    company: 'Broadside & Quarto Press',
+    industry: 'Literature & Publishing',
+    location: 'Oxford Meadow Reach',
+  },
+  {
+    name: 'Beatrix Shaw',
+    position: 'Poet & Broadside Printer',
+    company: 'Whalebone Letterpress',
+    industry: 'Literature & Publishing',
+    location: 'Whitby Harbor Pier',
+  },
+  {
+    name: 'Dr. Thais Beaumont',
+    position: 'Marine Oceanographer',
+    company: 'Brest Hydrographic Station',
+    industry: 'Science, Ecology & Botany',
+    location: 'Brittany Tide Basins',
+  },
+  {
+    name: 'Liam O’Connell',
+    position: 'Herbarium Botanist',
+    company: 'Kew Royal Herbarium',
+    industry: 'Science, Ecology & Botany',
+    location: 'Thames Estuary Reach',
+  },
+  {
+    name: 'Mikhail Voronin',
+    position: 'Master Horologist (Watchmaker)',
+    company: 'Chronos Heritage Atelier',
+    industry: 'Craftsmanship & Artisan Trades',
+    location: 'Geneva Lakeside Pier',
+  },
+  {
+    name: 'Soren Lindqvist',
+    position: 'Lighthouse Keeper',
+    company: 'Scandinavian Coast Beacon Service',
+    industry: 'Maritime, Cartography & Navigation',
+    location: 'Lofoten Archipelago Watch',
+  },
+  {
+    name: 'Captain Corina Del Mar',
+    position: 'Deep-Water Harbor Pilot',
+    company: 'Valparaíso Maritime Directorate',
+    industry: 'Maritime, Cartography & Navigation',
+    location: 'Cerro Alegre Headland',
+  },
+  {
+    name: 'Isolde Faulkner',
+    position: 'Acoustic Composer',
+    company: 'Chamber Resonance Society',
+    industry: 'Arts, Music & Film',
+    location: 'Salzburg Alpine Valley',
+  },
+  {
+    name: 'Helena Berg',
+    position: 'Public Interest Advocate',
+    company: 'Maritime Human Rights Council',
+    industry: 'Finance, Law & Governance',
+    location: 'The Hague Coastal Haven',
+  },
+  {
+    name: 'Professor Arthur Pendelton',
+    position: 'Rare Books Curator & Docent',
+    company: 'Bodleian Special Collections',
+    industry: 'Philosophy & Education',
+    location: 'Isis Riverbank Roost',
   },
 ];
 
