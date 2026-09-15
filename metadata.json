@@ -1,7 +1,0 @@
-{
-  "name": "Drift",
-  "description": "A slow, contemplative messaging platform embracing uncertainty, serendipity, and poetic distance through carrier pigeons and ocean drift bottles.",
-  "requestFramePermissions": [],
-  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
-}
-
