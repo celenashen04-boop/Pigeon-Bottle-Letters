@@ -1,0 +1,135 @@
+@import "tailwindcss";
+
+@layer base {
+  body {
+    background-color: #171412;
+    color: #ded0bf;
+    font-family: 'Plus Jakarta Sans', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+}
+
+/* Custom Typography Utilities */
+/* Non-header vintage / body text - uses clean, legible sans-serif */
+.font-serif-vintage {
+  font-family: 'Plus Jakarta Sans', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+
+/* Classical Monastic serif option for letter paper writing */
+.font-garamond {
+  font-family: 'EB Garamond', Georgia, serif;
+}
+
+.font-display {
+  font-family: 'Playfair Display', Georgia, serif;
+}
+
+.font-cinzel {
+  font-family: 'Cinzel', serif;
+}
+
+.font-handwriting {
+  font-family: 'Caveat', cursive;
+}
+
+.font-typewriter {
+  font-family: 'Courier Prime', monospace;
+}
+
+/* Atmospheric & Parchment Texture Styles */
+.bg-parchment {
+  background-color: #f7f3e8;
+  background-image: radial-gradient(#d6c9ad 0.75px, transparent 0.75px), radial-gradient(#ede3cf 0.75px, #f7f3e8 0.75px);
+  background-size: 30px 30px;
+  background-position: 0 0, 15px 15px;
+}
+
+.bg-tea-stained {
+  background-color: #eee4cc;
+  background-image: radial-gradient(ellipse at top left, #dfd0b2 0%, #eee4cc 50%, #e2d2b5 100%);
+}
+
+.bg-linen {
+  background-color: #fcf9f2;
+  background-image: 
+    linear-gradient(rgba(200, 185, 160, 0.12) 1px, transparent 0),
+    linear-gradient(90deg, rgba(200, 185, 160, 0.12) 1px, transparent 0);
+  background-size: 8px 8px;
+}
+
+.bg-midnight-vellum {
+  background-color: #191c24;
+  background-image: radial-gradient(circle at 50% 20%, rgba(45, 60, 95, 0.4) 0%, #151820 80%);
+  color: #e2e8f0;
+}
+
+.bg-botanical-pressed {
+  background-color: #f4f6ee;
+  background-image: radial-gradient(#d1dbc2 0.8px, transparent 0.8px);
+  background-size: 24px 24px;
+}
+
+.bg-ocean-drift {
+  background-color: #0b1e2c;
+  background-image: 
+    radial-gradient(ellipse at 80% 20%, rgba(56, 189, 248, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 20% 80%, rgba(2, 132, 199, 0.14) 0%, transparent 60%),
+    radial-gradient(#1e3b52 0.75px, #0b1e2c 0.75px);
+  background-size: 100% 100%, 100% 100%, 26px 26px;
+  color: #e0f2fe;
+}
+
+.bg-sea-mist {
+  background-color: #f0f8fb;
+  background-image: 
+    radial-gradient(ellipse at 50% 0%, rgba(14, 165, 233, 0.08) 0%, transparent 70%),
+    radial-gradient(#b8d8e6 0.75px, transparent 0.75px);
+  background-size: 100% 100%, 28px 28px;
+  color: #0c2b3d;
+}
+
+.bg-wood-desk {
+  background-color: #1f1b18;
+  background-image: radial-gradient(circle at 50% 50%, #29241f 0%, #141210 100%);
+}
+
+/* Deckled Edge & Paper Shadows */
+.paper-shadow {
+  box-shadow: 
+    0 1px 3px rgba(0,0,0,0.12),
+    0 8px 24px -4px rgba(45,30,15,0.18),
+    0 16px 36px -8px rgba(35,20,10,0.15);
+}
+
+.paper-shadow-deep {
+  box-shadow: 
+    0 2px 5px rgba(0,0,0,0.2),
+    0 15px 35px -5px rgba(25,18,12,0.35),
+    0 25px 50px -12px rgba(15,10,5,0.4);
+}
+
+.bottle-glass {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.45) 0%, rgba(180, 225, 220, 0.15) 40%, rgba(120, 180, 175, 0.35) 100%);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 
+    inset 0 1px 2px rgba(255,255,255,0.8),
+    inset 0 -10px 25px rgba(20, 80, 75, 0.2),
+    0 12px 30px rgba(0, 30, 25, 0.3);
+}
+
+/* Custom Scrollbar for vintage reading */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(40, 35, 30, 0.2);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(140, 120, 95, 0.4);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(140, 120, 95, 0.7);
+}
